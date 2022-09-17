@@ -1,0 +1,245 @@
+#+TITLE: Leetcode Medium Solutions
+#+AUTHOR: lloydlobo
+#+STARTUP: overview
+#+OPTIONS: num:nil ^:{}
+-----
+
+* Table Of Contents :toc:
+- [[#][───────────────────────────────────────────────────────────]]
+- [[#0075-sort-colors-bubble-sort][0075 SORT COLORS (Bubble Sort)]]
+  - [[#source][Source]]
+  - [[#explanation][Explanation]]
+  - [[#alternatives][Alternatives]]
+
+* ───────────────────────────────────────────────────────────
+* 0075 SORT COLORS (Bubble Sort)
+https://leetcode.com/problems/sort-colors/
+** Source
+#+NAME: sort-colors
+#+begin_src go :tangle ./0075_sort-colors/main.go :noweb yes :comments link
+package main
+
+import (
+	"fmt"
+	"log"
+)
+
+func swap(nums []int, i, j int) {
+	tempNum := nums[i]
+	nums[i] = nums[j]
+	nums[j] = tempNum
+}
+
+// sortColors() is bubble sort implementation for colors.
+//
+// Process: Swap, check order, one-round bubbling, repeated n times.
+// Runtime: 4 ms, faster than 25.87% of Go online submissions for Sort Colors.
+// Memory Usage: 2.1 MB, less than 67.82% of Go online submissions for Sort Colors.
+//
+// ♥ 19:56:37.689437 | nums: [2 0 2 1 1 0]
+// ♥ 19:56:37.689492 | Output: [0 0 1 1 2 2]
+func sortColors(nums []int) []int {
+	len := len(nums)
+	// loop j repeats i-loop n times
+	for j := 0; j < len; j++ {
+		// loop i for each len(nums)
+		for i := 0; i < len-1; i++ {
+			if nums[i] > nums[i+1] {
+				swap(nums, i, i+1)
+			}
+		}
+	}
+	return nums
+}
+
+func main() {
+	log.SetPrefix("\n♥ ") // SetPrefix sets the output prefix for the standard logger\.
+	log.SetFlags(4)       // SetFlags sets the output flags for the standard logger\. The flag bits are Ldate, Ltime, and so on\.
+	fmt.Println("0075-sort-colors/main.go: main()")
+	nums := []int{2, 0, 2, 1, 1, 0}
+	log.Println("| nums:", nums)
+	output := sortColors(nums)
+	log.Println("| Output:", output)
+}
+#+end_src
+
+** Explanation
+URL: https://www.code-recipe.com/post/two-sum
+Given an array nums with n objects colored red, white, or blue, sort them in-place so that objects of the same color are adjacent, with the colors in the order red, white, and blue.
+
+We will use the integers 0, 1, and 2 to represent the color red, white, and blue, respectively.
+
+You must solve this problem without using the library's sort function.
+*** Example 1:
+Input: nums = [2,0,2,1,1,0]
+Output: [0,0,1,1,2,2]
+*** Example 2:
+Input: nums = [2,0,1]
+Output: [0,1,2]
+*** Constraints:
+ - n == nums.length
+ - 1 <= n <= 300
+ - nums[i] is either 0, 1, or 2.
+
+** Alternatives
+#+NAME: two-sum alternative
+#+begin_src go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+/*
+ ,* twoSum()
+ ,*
+ ,* Runtime: 45 ms, faster than 23.21% of go online submissions for two sum.
+ ,* Memory Usage: 3.7 MB, less than 75.17% of Go online submissions for Two Sum.
+ ,*/
+func twoSum(nums []int, target int) []int {
+	len := len(nums)
+	for i := 0; i < len-1; i += 1 {
+		for j := i + 1; j < len; j += 1 {
+			if nums[i]+nums[j] == target {
+				// fmt.Println("",nums[i], nums[j])
+				return []int{i, j}
+			}
+		}
+	}
+
+	return []int{}
+}
+
+/*
+ ,* Runtime: 17 ms, faster than 41.20% of Go online submissions for Two Sum.
+ ,* Memory Usage: 4.4 MB, less than 38.75% of Go online submissions for Two Sum.
+ ,*/
+func twoSumLookupMap(nums []int, target int) []int {
+	count := make(map[int]int)
+	for i, num := range nums {
+		j, ok := count[num]
+		if ok {
+			return []int{j, i}
+		}
+		count[target-num] = i
+	}
+	return []int{}
+}
+
+func main() {
+	nums := []int{2, 7, 11, 15}
+	target := 9
+	output := twoSum(nums, target)
+	fmt.Println("Output:", output)
+}
+
+/* https://www.code-recipe.com/post/two-sum
+ ,* For a given input array this algorithm does the following steps:
+ ,* Create a hashmap which accepts integer datatype as key and value.
+ ,* Iterate through each element in the given array starting from the first element.
+ ,* In each iteration check if required number (required  number = target sum - current number) is present in the hashmap.
+ ,* If present, return {required number index, current number index} as  result.
+ ,* Otherwise add the current iteration number as key and its index as value to the hashmap. Repeat this  until you find the result.
+ ,*/
+func twoSumIsSeenMapnums(nums []int, target int) []int {
+	// Create a hashmap which accepts integer datatype as key and value.
+	mapIndex := make(map[int]int)
+	// Iterate through each element in the given array starting from the first element.
+	for idxCurr, numCurr := range nums {
+		// In each iteration check if required number (required  number = target sum - current number) is present in the hashmap.
+		if idxRequired, isPresent := mapIndex[target-numCurr]; isPresent {
+			return []int{idxRequired, idxCurr}
+		}
+		// Otherwise add the current iteration number as key and its index as value to the hashmap.
+		// Repeat this  until you find the result.
+		mapIndex[numCurr] = idxCurr
+	}
+
+	return []int{}
+}
+
+// With slices leave out the element count => Array [4]String or [...]String (compiler will count it)
+func sleep(n int) {
+	for { // Run infinite loop
+		if n <= 0 {
+			break // if n is reduced to or below zero break loop
+		} else {
+			loadingChar := "."
+			fmt.Printf("%v", loadingChar)
+			time.Sleep(300 * time.Millisecond) // wait 300 milliseconds
+			n -= 1                             // reverse countdown
+		}
+	}
+}
+
+// func slice() { var intSlice []int var strSlice []string fmt.Println(reflect.ValueOf(intSlice).Kind()) fmt.Println(reflect.ValueOf(strSlice).Kind()) }
+func getIndex(prev int, curr int, i int, j int, target int) []int {
+	sum := curr + prev
+	fmt.Println("func getIndex Output: num at index", i, "and", j, "is", sum)
+	return []int{i, j}
+}
+
+func twoSumSlice(nums []int, target int) []int {
+	var result []int
+	var sliceResult [][]int
+	lenNums := len(nums)
+
+	for i := 0; i <= lenNums-1; i += 1 {
+		for j := 0; j <= lenNums-1; j += 1 {
+			prev := nums[i]
+			curr := nums[j]
+			/* sleep(3)
+			fmt.Println("", prev, curr) */
+			if curr+prev == target {
+				result = getIndex(prev, curr, i, j, target)
+				resultSlice := [][]int{result}
+				// arrResult = append(arrResult, result...)
+				sliceResult = append(sliceResult, resultSlice...)
+				fmt.Println("result:", result)
+			}
+
+		}
+	}
+
+	return sliceResult[0]
+}
+
+// Time: O(n*n) = O(n^2)
+// Space: O(1)
+
+func twoSumForLoop(nums []int, target int) []int {
+	// O(n)
+	for i := 0; i < len(nums)-1; i++ {
+		// O(n)
+		for j := i + 1; j < len(nums); j++ {
+			// Time: O(1)
+			if nums[i]+nums[j] == target {
+				return []int{i, j}
+			}
+		}
+	}
+	return []int{}
+}
+
+/* for i := 0; i < len(arrResult); i += 1 {
+	arr := arrResult[i]
+
+	for j := 0; j < len(arr); j += 1 {
+		slice := arrResult[i][j]
+		fmt.Print(" slice: ", slice, " i: ", i, " j: ", j, arrResult[i], arrResult[j])
+	}
+}
+fmt.Println("\narrResult:", arrResult) */
+
+func twoSumHashMap(nums []int, target int) []int {
+	seenNums := make(map[int]int)
+	for index, thisNum := range nums {
+		if seenIndex, ok := seenNums[target-thisNum]; ok {
+			return []int{seenIndex, index}
+		}
+		seenNums[thisNum] = index
+	}
+	return []int{0, 0} // Should not happen
+}
+#+end_src

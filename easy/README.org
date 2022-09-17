@@ -1,0 +1,331 @@
+#+TITLE: Leetcode Easy Solutions
+#+AUTHOR: lloydlobo
+#+STARTUP: showeverything
+#+OPTIONS: num:nil ^:{}
+# #+PROPERTY: header-args :tangle yes :results none
+-----
+
+* Table Of Contents :toc:
+- [[#][───────────────────────────────────────────────────────────]]
+- [[#0001-two-sum][0001 TWO SUM]]
+  - [[#source][Source]]
+  - [[#explanation][Explanation]]
+  - [[#alternatives][Alternatives]]
+- [[#0009-palindrome-number][0009 PALINDROME NUMBER]]
+  - [[#source-1][Source]]
+- [[#0704-binary-search][0704 BINARY SEARCH]]
+  - [[#source-2][Source]]
+  - [[#explanation-1][Explanation]]
+  - [[#constraints][Constraints:]]
+
+* ───────────────────────────────────────────────────────────
+* 0001 TWO SUM
+** Source
+#+NAME: two-sum
+#+begin_src go :tangle ./0001_two-sum/main.go :noweb yes :comments link
+package main
+
+import "fmt"
+
+func twoSum(nums []int, target int) []int {
+	len := len(nums)
+	for i := 0; i < len-1; i += 1 {
+		for j := i + 1; j < len; j += 1 {
+			sum := nums[i] + nums[j]
+			if sum == target {
+				return []int{i, j}
+			}
+		}
+	}
+
+	return []int{}
+}
+
+func main() {
+	fmt.Println("001_two-sum/main.go: main()")
+	nums := []int{2, 7, 10, 15}
+	target := 9
+	output := twoSum(nums, target)
+	fmt.Println("\nOutput:", output)
+}
+#+end_src
+
+** Explanation
+URL: https://www.code-recipe.com/post/two-sum
+ - For a given input array this algorithm does the following steps:
+ - Create a hashmap which accepts integer datatype as key and value.
+ - Iterate through each element in the given array starting from the first element.
+ - In each iteration check if required number (required  number = target sum - current number) is present in the hashmap.
+ - If present, return {required number index, current number index} as  result.
+ - Otherwise add the current iteration number as key and its index as value to the hashmap. Repeat this  until you find the result.
+
+** Alternatives
+#+NAME: two-sum alternative
+#+begin_src go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+/*
+ ,* twoSum()
+ ,*
+ ,* Runtime: 45 ms, faster than 23.21% of go online submissions for two sum.
+ ,* Memory Usage: 3.7 MB, less than 75.17% of Go online submissions for Two Sum.
+ ,*/
+func twoSum(nums []int, target int) []int {
+	len := len(nums)
+	for i := 0; i < len-1; i += 1 {
+		for j := i + 1; j < len; j += 1 {
+			if nums[i]+nums[j] == target {
+				// fmt.Println("",nums[i], nums[j])
+				return []int{i, j}
+			}
+		}
+	}
+
+	return []int{}
+}
+
+/*
+ ,* Runtime: 17 ms, faster than 41.20% of Go online submissions for Two Sum.
+ ,* Memory Usage: 4.4 MB, less than 38.75% of Go online submissions for Two Sum.
+ ,*/
+func twoSumLookupMap(nums []int, target int) []int {
+	count := make(map[int]int)
+	for i, num := range nums {
+		j, ok := count[num]
+		if ok {
+			return []int{j, i}
+		}
+		count[target-num] = i
+	}
+	return []int{}
+}
+
+func main() {
+	nums := []int{2, 7, 11, 15}
+	target := 9
+	output := twoSum(nums, target)
+	fmt.Println("Output:", output)
+}
+
+/* https://www.code-recipe.com/post/two-sum
+ ,* For a given input array this algorithm does the following steps:
+ ,* Create a hashmap which accepts integer datatype as key and value.
+ ,* Iterate through each element in the given array starting from the first element.
+ ,* In each iteration check if required number (required  number = target sum - current number) is present in the hashmap.
+ ,* If present, return {required number index, current number index} as  result.
+ ,* Otherwise add the current iteration number as key and its index as value to the hashmap. Repeat this  until you find the result.
+ ,*/
+func twoSumIsSeenMapnums(nums []int, target int) []int {
+	// Create a hashmap which accepts integer datatype as key and value.
+	mapIndex := make(map[int]int)
+	// Iterate through each element in the given array starting from the first element.
+	for idxCurr, numCurr := range nums {
+		// In each iteration check if required number (required  number = target sum - current number) is present in the hashmap.
+		if idxRequired, isPresent := mapIndex[target-numCurr]; isPresent {
+			return []int{idxRequired, idxCurr}
+		}
+		// Otherwise add the current iteration number as key and its index as value to the hashmap.
+		// Repeat this  until you find the result.
+		mapIndex[numCurr] = idxCurr
+	}
+
+	return []int{}
+}
+
+// With slices leave out the element count => Array [4]String or [...]String (compiler will count it)
+func sleep(n int) {
+	for { // Run infinite loop
+		if n <= 0 {
+			break // if n is reduced to or below zero break loop
+		} else {
+			loadingChar := "."
+			fmt.Printf("%v", loadingChar)
+			time.Sleep(300 * time.Millisecond) // wait 300 milliseconds
+			n -= 1                             // reverse countdown
+		}
+	}
+}
+
+// func slice() { var intSlice []int var strSlice []string fmt.Println(reflect.ValueOf(intSlice).Kind()) fmt.Println(reflect.ValueOf(strSlice).Kind()) }
+func getIndex(prev int, curr int, i int, j int, target int) []int {
+	sum := curr + prev
+	fmt.Println("func getIndex Output: num at index", i, "and", j, "is", sum)
+	return []int{i, j}
+}
+
+func twoSumSlice(nums []int, target int) []int {
+	var result []int
+	var sliceResult [][]int
+	lenNums := len(nums)
+
+	for i := 0; i <= lenNums-1; i += 1 {
+		for j := 0; j <= lenNums-1; j += 1 {
+			prev := nums[i]
+			curr := nums[j]
+			/* sleep(3)
+			fmt.Println("", prev, curr) */
+			if curr+prev == target {
+				result = getIndex(prev, curr, i, j, target)
+				resultSlice := [][]int{result}
+				// arrResult = append(arrResult, result...)
+				sliceResult = append(sliceResult, resultSlice...)
+				fmt.Println("result:", result)
+			}
+
+		}
+	}
+
+	return sliceResult[0]
+}
+
+// Time: O(n*n) = O(n^2)
+// Space: O(1)
+
+func twoSumForLoop(nums []int, target int) []int {
+	// O(n)
+	for i := 0; i < len(nums)-1; i++ {
+		// O(n)
+		for j := i + 1; j < len(nums); j++ {
+			// Time: O(1)
+			if nums[i]+nums[j] == target {
+				return []int{i, j}
+			}
+		}
+	}
+	return []int{}
+}
+
+/* for i := 0; i < len(arrResult); i += 1 {
+	arr := arrResult[i]
+
+	for j := 0; j < len(arr); j += 1 {
+		slice := arrResult[i][j]
+		fmt.Print(" slice: ", slice, " i: ", i, " j: ", j, arrResult[i], arrResult[j])
+	}
+}
+fmt.Println("\narrResult:", arrResult) */
+
+func twoSumHashMap(nums []int, target int) []int {
+	seenNums := make(map[int]int)
+	for index, thisNum := range nums {
+		if seenIndex, ok := seenNums[target-thisNum]; ok {
+			return []int{seenIndex, index}
+		}
+		seenNums[thisNum] = index
+	}
+	return []int{0, 0} // Should not happen
+}
+#+end_src
+* 0009 PALINDROME NUMBER
+** Source
+#+NAME: palindrome-number
+#+begin_src go :tangle ./0009_palindrome-number/main.go :comments link :noweb yes
+package main
+
+// works
+import (
+	"fmt"
+	"strconv"
+	// "strings"
+)
+
+/*
+	 reverseStr() Function.
+		  https://www.geeksforgeeks.org/how-to-reverse-a-string-in-golang/
+			type string string
+			string is the set of all strings of 8\-bit bytes, conventionally but not necessarily representing UTF\-8\-encoded text\.
+			A string may be empty, but not nil\. Values of string type are immutable\. [`string` on pkg.go.dev](https://pkg.go.dev/builtin?utm_source=gopls#string)
+,*/
+func reverseStr(str string) (result string) {
+	// Append the result at each for loop turn at the end of string.
+	for _, v := range str {
+		result = string(v) + result
+	}
+	return
+}
+
+func isPalindrome(x int) bool {
+	strX := strconv.FormatInt(int64(x), 10)
+	strRevX := reverseStr(strX)
+	return strX == strRevX
+} // fmt.Println("strX:", strX, "strings", strRevX)
+
+func printResult(int int) {
+	result := isPalindrome(int)
+	fmt.Println("Output:", int, "isPalindrome", result)
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+func main() {
+	sliceIntNums := []int{121, 212, 123, 101}
+	for _, intNum := range sliceIntNums {
+		printResult(intNum)
+	}
+}
+
+#+end_src
+
+#+RESULTS:
+: Output: true
+
+
+
+
+
+* 0704 BINARY SEARCH
+** Source
+#+NAME: binary-search
+#+begin_src go :tangle ./0704_binary-search/main.go :noweb yes :comments link
+package main
+
+import "fmt"
+
+func twoSum(nums []int, target int) []int {
+	len := len(nums)
+	for i := 0; i < len-1; i += 1 {
+		for j := i + 1; j < len; j += 1 {
+			sum := nums[i] + nums[j]
+			if sum == target {
+				return []int{i, j}
+			}
+		}
+	}
+
+	return []int{}
+}
+
+func main() {
+	fmt.Println("001_two-sum/main.go: main()")
+	nums := []int{2, 7, 10, 15}
+	target := 9
+	output := twoSum(nums, target)
+	fmt.Println("\nOutput:", output)
+}
+#+end_src
+
+** Explanation
+URL: https://leetcode.com/problems/binary-search/
+Given an array of integers nums which is sorted in ascending order, and an integer target, write a function to search target in nums. If target exists, then return its index. Otherwise, return -1.
+
+You must write an algorithm with O(log n) runtime complexity.
+
+*** Example 1:
+Input: nums = [-1,0,3,5,9,12], target = 9
+Output: 4
+Explanation: 9 exists in nums and its index is 4
+
+*** Example 2:
+Input: nums = [-1,0,3,5,9,12], target = 2
+Output: -1
+Explanation: 2 does not exist in nums so return -1
+
+** Constraints:
+    - 1 <= nums.length <= 104
+    - -104 < nums[i], target < 104
+    - All the integers in nums are unique.
+    - nums is sorted in ascending order.
