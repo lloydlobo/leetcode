@@ -31,21 +31,21 @@ func getTestSearchArgs() ([]int, int, int) {
 	return nums, target, want
 }
 
-// TestSearch is for testing binary search algorithm
+// TestSearchForLoop is for testing binary search algorithm
 // to find index of required target int.
 //
 // PASS
 // ok      binary-search   0.001s
 //
-// --- FAIL: TestSearch (0.00s)
+// --- FAIL: TestSearchForLoop (0.00s)
 // main_test.go:36: Search([-1 0 3 5 8 12], 9) = -1; want 4
 // FAIL
 // exit status 1
 // FAIL    binary-search   0.001s
-func TestSearch(t *testing.T) {
+func TestSearchForLoop(t *testing.T) {
 	nums, target, want := getTestSearchArgs()
 
-	got := Search(nums, target)
+	got := SearchForLoop(nums, target)
 	if got != want {
 		t.Errorf("Search(%d, %v) = %v; want %v", nums, target, got, want)
 	}
@@ -59,17 +59,17 @@ func TestSearch(t *testing.T) {
 // goarch: amd64
 // pkg: binary-search
 // cpu: Intel(R) Core(TM) i7-8700 CPU @ 3.20GHz
-// BenchmarkSearch-12              426310108                2.815 ns/op
+// BenchmarkSearchForLoop-12              426310108                2.815 ns/op
 // BenchmarkRandInt-12             95099158                12.29 ns/op
 // BenchmarkPrimeNumbers-12          471997              2384 ns/op
 // BenchmarkBigLen-12                     1        1810085852 ns/op
 // PASS
 // ok      binary-search   5.634s
-func BenchmarkSearch(b *testing.B) {
+func BenchmarkSearchForLoop(b *testing.B) {
 	nums, target, _ := getTestSearchArgs()
 
 	for i := 0; i < b.N; i++ {
-		Search(nums, target)
+		SearchForLoop(nums, target)
 	}
 }
 
