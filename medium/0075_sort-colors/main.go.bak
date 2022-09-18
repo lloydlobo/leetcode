@@ -1,4 +1,4 @@
-// [[file:../README.org::sort-colors][sort-colors]]
+/* // [[file:../README.org::sort-colors][sort-colors]]
 package main
 
 import (
@@ -53,4 +53,4 @@ func main() {
 	log.Println("| Output:", output)
 }
 
-// sort-colors ends here
+// sort-colors ends here */

@@ -50,6 +50,11 @@ func main() {
 }
 #+end_src
 
+#+RESULTS: two-sum
+: 001_two-sum/main.go: main()
+:
+: Output: [0 1]
+
 ** Explanation
 URL: https://www.code-recipe.com/post/two-sum
  - For a given input array this algorithm does the following steps:
@@ -274,13 +279,174 @@ func main() {
 : Output: true
 
 
-
-
-
 * 0704 BINARY SEARCH
 ** Source
+*** Go
 #+NAME: binary-search
 #+begin_src go :tangle ./0704_binary-search/main.go :noweb yes :comments link
+
+// Given an array of integers nums which is sorted in ascending order, and an integer target, write a function to search target in nums.
+// If target exists, then return its index. Otherwise, return -1.
+//
+// You must write an algorithm with O(log n) runtime complexity.
+//
+// https://leetcode.com/problems/binary-search/
+//
+// Constraints:
+//
+//   - 1 <= nums.length <= 104
+//   - -104 < nums[i], target < 104
+//   - All the integers in nums are unique.
+//   - nums is sorted in ascending order.
+package main
+
+import (
+	"fmt"
+	"log"
+	"sort"
+	"stdout"
+)
+
+// Runtime: 31 ms, faster than 95.31% of Go online submissions for Binary Search.
+// Memory Usage: 6.7 MB, less than 94.48% of Go online submissions for Binary Search.
+//
+// Runtime: 32 ms, faster than 93.68% of Go online submissions for Binary Search.
+// Memory Usage: 6.5 MB, less than 99.96% of Go online submissions for Binary Search.
+func searchDivideAndConquer(nums []int, target int) int {
+	low, high := 0, len(nums)-1 // left: is the first position at 0// right: 0 index means we subtract one from len
+	for low <= high {
+		mid := (low + high) / 2
+		if nums[mid] == target {
+			return mid // If target is in the middle itself
+		} else if nums[mid] > target {
+			high-- // high = mid - 1 //  else the target can only be present in the left subarray/slice
+		} else {
+			low++ // low = low + 1 // If target is less than mid then it will be in the right subarray/slice
+		}
+	}
+	return -1
+}
+
+// Runtime: 40 ms, faster than 72.72% of Go online submissions for Binary Search.
+// Memory Usage: 7.1 MB, less than 53.18% of Go online submissions for Binary Search.
+//
+// Runtime: 33 ms, faster than 91.94% of Go online submissions for Binary Search.
+// Memory Usage: 7 MB, less than 61.39% of Go online submissions for Binary Search.
+func searchBruteForce(nums []int, target int) int {
+	for i := 0; i < len(nums); i++ {
+		if nums[i] == target {
+			return i
+		}
+	}
+	return -1
+}
+
+func main() {
+	log.SetFlags(log.Ldate | log.Lshortfile)
+	log.Println("| 0704_binary-search/main.go: main()")
+	nums := []int{-1, 0, 3, 5, 9, 12}
+	target := 9
+
+	searchRunMain()
+
+	output := SearchForLoop(nums, target)
+	fmt.Printf("\nSearchForLoop:%2v\n", output)
+
+	nums, target, _ = getNumsTargets()
+	outputIterative := SearchIterative(nums, target)
+	fmt.Println("\nSearchIterative:", outputIterative)
+
+	// nums, target, _ = getRandomNumsSlice(20)
+	// outputIterative = SearchIterative(nums, target)
+	// fmt.Println("\nSearchIterative:", outputIterative)
+
+	nums = []int{-1, 0, 3, 5, 9, 12}
+	target = 3
+	// nums, target, _ = getRandomNumsSlice(20)
+	outputRecursive := SearchRecursive(nums, target, 0, len(nums))
+	fmt.Println("\nSearchRecursive:", outputRecursive)
+
+	nums = []int{-1, 0, 3, 5, 9, 12}
+	target = 1
+	// nums, target, _ = getRandomNumsSlice(20)
+	outputRecursive = SearchRecursive(nums, target, 0, len(nums))
+	fmt.Printf("\nSearchRecursive: %2v \n\n", outputRecursive)
+	// stdout.OutputToFile("file.log")
+
+	stdout.OutputToFile("")
+
+}
+#+end_src
+*** Go Recursive
+#+begin_example go
+
+// Binary Search Algorithm: The basic steps to perform Binary Search are:
+//
+// https://www.geeksforgeeks.org/binary-search/
+//
+//	Begin with the mid element of the whole array as a search key.
+//	If the value of the search key is equal to the item then return an index of the search key.
+//	Or if the value of the search key is less than the item in the middle of the interval, narrow the interval to the lower half.
+//	Otherwise, narrow it to the upper half.
+//	Repeatedly check from the second point until the value is found or the interval is empty.
+//
+// # Binary Search Algorithm can be implemented in the following two ways
+//
+// Iterative Method
+// Recursive Method
+
+// SearchRecursive
+//
+// Credits: https://www.geeksforgeeks.org/binary-search/
+//
+// l, r := 0, len(nums)-1 // left & right
+func SearchRecursive(nums []int, target int, l, r int) int {
+	if r >= l {
+		mid := (r + l) / 2 // Or l + (r - l) / 2.
+
+		if nums[mid] == target {
+			return mid // If the target is in the middle itself.
+		} else if nums[mid] > target {
+			rSub := mid - 1 // move to the left
+			return SearchRecursive(nums, target, l, rSub)
+		} else {
+			lAdd := mid + 1 // move to the right
+			return SearchRecursive(nums, target, lAdd, r)
+		}
+	}
+
+	return -1
+}
+
+// Runtime: 79 ms, faster than 11.19% of Go online submissions for Binary Search.
+// Memory Usage: 7.6 MB, less than 10.50% of Go online submissions for Binary Search.
+func searchRecursive(nums []int, target int) int {
+	return binarySearchRecursive(nums, target, 0, len(nums)-1)
+}
+
+// Runtime: 79 ms, faster than 11.19% of Go online submissions for Binary Search.
+// Memory Usage: 7.6 MB, less than 10.50% of Go online submissions for Binary Search.
+func binarySearchRecursive(nums []int, target, left, right int) int {
+	var output int
+	if left > right {
+		return -1
+	}
+	mid := (left + right) / 2
+	if nums[mid] == target {
+		return mid
+	} else if target < nums[mid] {
+		output = binarySearchRecursive(nums, target, left, mid-1)
+	} else {
+		output = binarySearchRecursive(nums, target, mid+1, right)
+	}
+	return output
+}
+
+#+end_example
+
+*** Go Alternative
+#+NAME: binary-search
+#+begin_example go
 
 // Given an array of integers nums which is sorted in ascending order, and an integer target, write a function to search target in nums.
 // If target exists, then return its index. Otherwise, return -1.
@@ -325,7 +491,6 @@ import (
 	"log"
 	"sort"
 	"stdout"
-	// "time"
 )
 
 // Runtime: 68 ms, faster than 27.39% of Go online submissions for Binary SearchForLoop.
@@ -429,11 +594,94 @@ func SearchRecursive(nums []int, target int, l, r int) int {
 	return -1
 }
 
+// Runtime: 31 ms, faster than 95.31% of Go online submissions for Binary Search.
+// Memory Usage: 6.7 MB, less than 94.48% of Go online submissions for Binary Search.
+//
+// Runtime: 32 ms, faster than 93.68% of Go online submissions for Binary Search.
+// Memory Usage: 6.5 MB, less than 99.96% of Go online submissions for Binary Search.
+func searchMid(nums []int, target int) int {
+	low, high := 0, len(nums)-1
+	for low <= high {
+		mid := (low + high) / 2
+		if nums[mid] == target {
+			return mid
+		} else if nums[mid] > target {
+			high--
+		} else {
+			low++
+		}
+	}
+	return -1
+}
+
+// Runtime: 40 ms, faster than 72.72% of Go online submissions for Binary Search.
+// Memory Usage: 7.1 MB, less than 53.18% of Go online submissions for Binary Search.
+//
+// Runtime: 33 ms, faster than 91.94% of Go online submissions for Binary Search.
+// Memory Usage: 7 MB, less than 61.39% of Go online submissions for Binary Search.
+func search(nums []int, target int) int {
+	for i := 0; i < len(nums); i++ {
+		if nums[i] == target {
+			return i
+		}
+	}
+	return -1
+}
+
+// Runtime: 79 ms, faster than 11.19% of Go online submissions for Binary Search.
+// Memory Usage: 7.6 MB, less than 10.50% of Go online submissions for Binary Search.
+func searchRecursive(nums []int, target int) int {
+	return binarySearchRecursive(nums, target, 0, len(nums)-1)
+}
+
+// Runtime: 79 ms, faster than 11.19% of Go online submissions for Binary Search.
+// Memory Usage: 7.6 MB, less than 10.50% of Go online submissions for Binary Search.
+func binarySearchRecursive(nums []int, target, left, right int) int {
+	var output int
+	if left > right {
+		return -1
+	}
+	mid := (left + right) / 2
+	if nums[mid] == target {
+		return mid
+	} else if target < nums[mid] {
+		output = binarySearchRecursive(nums, target, left, mid-1)
+	} else {
+		output = binarySearchRecursive(nums, target, mid+1, right)
+	}
+	return output
+}
+
+func searchRunMain() {
+	var nums []int
+	var target int
+	nums = []int{-1, 0, 3, 5, 9, 12}
+	target = 9
+	fmt.Printf("search: %v, %v, %v\n", searchRecursive(nums, target), nums, target)
+	nums = []int{5}
+	target = 5
+	fmt.Printf("search: %v, %v, %v\n", searchRecursive(nums, target), nums, target)
+	nums = []int{5}
+	target = -5
+	fmt.Printf("search: %v, %v, %v\n", searchRecursive(nums, target), nums, target)
+	nums = []int{2, 5}
+	target = 5
+	fmt.Printf("search: %v, %v, %v\n", searchRecursive(nums, target), nums, target)
+	nums = []int{-1, 0, 5}
+	target = 5
+	fmt.Printf("searchRecursive: %v, %v, %v\n", searchRecursive(nums, target), nums, target)
+	nums = []int{-1, 0, 3, 5, 9, 12}
+	target = 13
+	fmt.Printf("searchRecursive: %v, %v, %v\n", searchRecursive(nums, target), nums, target)
+}
+
 func main() {
 	log.SetFlags(log.Ldate | log.Lshortfile)
 	log.Println("| 0704_binary-search/main.go: main()")
 	nums := []int{-1, 0, 3, 5, 9, 12}
 	target := 9
+
+	searchRunMain()
 
 	output := SearchForLoop(nums, target)
 	fmt.Printf("\nSearchForLoop:%2v\n", output)
@@ -462,7 +710,30 @@ func main() {
 	stdout.OutputToFile("")
 
 }
-#+end_src
+#+end_example
+
+#+RESULTS: binary-search
+
+*** TypeScript
+#+begin_example typescript
+function search(nums: number[], target: number): number {
+  let low = 0;
+  let high = nums.length - 1;
+  while (low <= high) {
+    const mid = Math.floor((low + high) / 2);
+    if (nums[mid] === target) {
+      return mid;
+    } else if (nums[mid] > target) {
+      // high--;
+      high = mid - 1;
+    } else if (nums[mid] < target) {
+      // low++
+      low = mid + 1;
+    }
+  }
+  return -1;
+}
+#+end_example
 
 ** Explanation
 URL: https://leetcode.com/problems/binary-search/
@@ -479,6 +750,29 @@ Explanation: 9 exists in nums and its index is 4
 Input: nums = [-1,0,3,5,9,12], target = 2
 Output: -1
 Explanation: 2 does not exist in nums so return -1
+*** More Examples
+#+begin_example markdown
+EXAMPLES:
+  Example 1:
+     Input: nums = [-1,0,3,5,9,12], target = 9
+     Output: 4
+     Explanation: 9 exists in nums and its index is 4
+
+  Example 2:
+     Input: nums = [-1,0,3,5,9,12], target = 2
+     Output: -1
+     Explanation: 2 does not exist in nums so return -1
+
+  Example 3:
+     Input: arr[] = {10, 20, 30, 50, 60, 80, 110, 130, 140, 170}, x = 110
+     Output: 6
+     Explanation: Element x is present at index 6.
+
+  Example 4:
+     Input: arr[] = {10, 20, 30, 40, 60, 110, 120, 130, 170}, x = 175
+     Output: -1
+     Explanation: Element x is not present in arr[].
+#+end_example
 
 ** Constraints:
     - 1 <= nums.length <= 104
