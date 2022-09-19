@@ -18,10 +18,15 @@
   - [[#examples][Examples]]
   - [[#constraints][Constraints]]
   - [[#complexity][Complexity]]
-- [[#0704-binary-search][0704 BINARY SEARCH]]
+- [[#0628-maximum-product-of-three-numbers][0628 MAXIMUM PRODUCT OF THREE NUMBERS]]
   - [[#source-3][Source]]
   - [[#explanation-2][Explanation]]
-  - [[#constraints-1][Constraints:]]
+  - [[#constraints-1][Constraints]]
+  - [[#examples-1][Examples]]
+- [[#0704-binary-search][0704 BINARY SEARCH]]
+  - [[#source-4][Source]]
+  - [[#explanation-3][Explanation]]
+  - [[#constraints-2][Constraints:]]
 
 * 0001 TWO SUM
 ** Source
@@ -389,6 +394,91 @@ Output: ["1","2","Fizz","4","Buzz","Fizz","7","8","Fizz","Buzz","11","Fizz","13"
 ** Complexity
 - Time complexity = O(n) where n is the number till we have to print the values in the fizz buzz way.
 - Space Complexity = O(n).
+* 0628 MAXIMUM PRODUCT OF THREE NUMBERS
+** Source
+*** Go
+#+NAME: maximum-product-of-three-numbers
+#+begin_src go :tangle ./0628_maximum-product-of-three-numbers/main.go :noweb yes :comments link :main no
+
+package main
+
+import (
+	"fmt"
+	"sort"
+)
+
+// 628. Maximum Product of Three Numbers.
+//
+// Given an integer array nums, find three numbers whose product is maximum and return the maximum product.
+//
+// Example 1:
+// Input: nums = [1,2,3]
+// Output: 6
+//
+// Example 2:
+// Input: nums = [1,2,3,4]
+// Output: 24
+//
+// Example 3:
+// Input: nums = [-1,-2,-3]
+// Output: -6
+//
+// Constraints:
+// - 3 <= nums.length <= 104
+// - 1000 <= nums[i] <= 1000
+//
+// Find the 3 greatest numbers & Sort them.
+// Pick first 3 numbers & Multiply them.
+func maximumProduct(nums []int) int {
+	len := len(nums)
+	// TODO: cache the index of the numbers while being sorted.
+	// compare if its below zero and append - to it,
+	sort.Ints(nums)
+	fmt.Printf("nums: %v\n", nums)
+
+	high := nums[len-1] * nums[len-2] * nums[len-3]
+	low := nums[0] * nums[1] * nums[2]
+	var output int
+	if absInt(high) > absInt(low) {
+		output = high
+	} else {
+		output = low
+	}
+	return output
+}
+
+// https://stackoverflow.com/a/68277627
+func absInt(x int) int {
+	return absDiffInt(x, 0)
+}
+
+func absDiffInt(x, y int) int {
+	if x < y {
+		return y - x
+	}
+	return x - y
+}
+
+// uint is an unsigned integer type that is at least 32 bits in size\. It is a
+// distinct type, however, and not an alias for, say, uint32\.
+func absDiffUint(x, y uint) uint {
+	if x < y {
+		return y - x
+	}
+	return x - y
+}
+
+func main() {
+	greet := "Hello, world!"
+	fmt.Printf("greet: %v\n", greet)
+	nums := []int{1, 2, 3}               // Output: 6
+	nums = []int{-100, -98, -1, 2, 3, 4} // Output: 24
+	fmt.Printf("maximumProduct(): %v\n", maximumProduct(nums))
+}
+#+end_src
+** Explanation
+** Constraints
+** Examples
 * 0704 BINARY SEARCH
 ** Source
 *** Go

@@ -76,5 +76,4 @@ func main() {
 }
 
 //   conversion from int to string yields a string of one rune, not a string of digits (did you mean fmt.Sprint(x)?) stringintconv [11, 27]
-
 // main:1 ends here
