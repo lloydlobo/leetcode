@@ -1,24 +1,22 @@
 package testcase
 
-import (
-// "fmt"
+type Testcase struct {
+	ArrNums  [][]int
+	ArrWants []bool
+	Length   int
+}
 
-// "github.com/fatih/color"
-)
-
-func ExecForLoop(f func([]int) bool, arrNums [][]int, arrWant []bool, n int) ([]bool, []bool) {
-	var arrOutputGot []bool
-	var arrOutPutWant []bool
-	for i := 0; i < n; i++ {
-		got := f(arrNums[i])
-		arrOutputGot = append(arrOutputGot, got)
-		want := arrWant[i]
-		arrOutPutWant = append(arrOutPutWant, want)
-		// color.Set(color.FgYellow, color.Bold)
-		// fmt.Printf("➜ %2v | output: %11v | want: %11v\n\n", i, got, want)
-		// color.Unset()
+// func ExecForLoop(f func([]int) bool, arrNums [][]int, arrWant []bool, n int) ([]bool, []bool) {
+func ExecForLoop(f func([]int) bool, t *Testcase) ([]bool, []bool) {
+	var arrGot []bool
+	var arrWant []bool
+	t.ArrNums, t.ArrWants = GetTestcase()
+	t.Length = len(t.ArrNums)
+	for i := 0; i < t.Length; i++ {
+		arrGot = append(arrGot, f(t.ArrNums[i]))
+		arrWant = append(arrWant, t.ArrWants[i])
 	}
-	return arrOutputGot, arrOutPutWant
+	return arrGot, arrWant
 }
 
 func GetTestcase() ([][]int, []bool) {

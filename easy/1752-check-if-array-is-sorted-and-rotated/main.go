@@ -2,7 +2,10 @@
 package main
 
 import (
+	"log"
 	"time"
+
+	"github.com/fatih/color"
 
 	testcase "github.com/lloydlobo/leetcode/easy/1752-check-if-array-is-sorted-and-rotated/testcase"
 )
@@ -12,10 +15,22 @@ func sleep(x time.Duration) {
 }
 
 func main() {
-	go sleep(0)
-	arrNums, arrWants := testcase.GetTestcase()
-	testcase.ExecForLoop(Check, arrNums, arrWants, len(arrNums))
-	testcase.ExecForLoop(CheckMiss, arrNums, arrWants, len(arrNums))
+	var arrGot []bool
+	var arrWant []bool
+
+	t := &testcase.Testcase{}
+	t.ArrNums, t.ArrWants = testcase.GetTestcase()
+
+	color.Set(color.FgYellow, color.Bold)
+	arrGot, arrWant = testcase.ExecForLoop(Check, t)
+	go sleep(500)
+	log.Printf(" ➜  got: %v | want: %v\n", arrGot, arrWant)
+	arrGot, arrWant = testcase.ExecForLoop(CheckMiss, t)
+	go sleep(500)
+	log.Printf(" ➜  got: %v | want: %v\n", arrGot, arrWant)
+	color.Unset()
+
+	// fmt.Printf("➜ %2v | output: %11v | want: %11v\n\n", i, got, want)
 }
 
 // Runtime: 0 ms, faster than 100.00% of Go online submissions for Check if Array Is Sorted and Rotated.
@@ -34,6 +49,7 @@ func CheckMiss(nums []int) bool {
 		isLastLessThanEqualFirst := nums[len(nums)-1] <= nums[0]
 		return isLastLessThanEqualFirst
 	}
+
 	return true
 }
 
@@ -62,6 +78,7 @@ func Check(nums []int) bool {
 			return false
 		}
 	}
+	// fmt.Printf("nums: %v\n", nums)
 	return true // return (count <= 1)
 }
 
