@@ -1,5 +1,4 @@
 // [[file:../README.org::check-if-array-is-sorted-and-rotated][check-if-array-is-sorted-and-rotated]]
-
 // 1752. Check if Array Is Sorted and Rotated
 // Easy
 // Given an array nums, return true if the array was originally sorted in non-decreasing order, then rotated some number of positions (including zero). Otherwise, return false.
@@ -123,5 +122,4 @@ func main() {
 
 	// fmt.Printf("➜ %2v | output: %11v | want: %11v\n\n", i, got, want)
 }
-
 // check-if-array-is-sorted-and-rotated ends here

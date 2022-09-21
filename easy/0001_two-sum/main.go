@@ -1,7 +1,6 @@
 // [[file:../README.org::two-sum][two-sum]]
 package main
 
-
 import "fmt"
 
 func twoSum(nums []int, target int) []int {
