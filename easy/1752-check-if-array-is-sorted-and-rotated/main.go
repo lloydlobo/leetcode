@@ -1,4 +1,16 @@
 // [[file:../README.org::check-if-array-is-sorted-and-rotated][check-if-array-is-sorted-and-rotated]]
+
+// 1752. Check if Array Is Sorted and Rotated
+// Easy
+// Given an array nums, return true if the array was originally sorted in non-decreasing order, then rotated some number of positions (including zero). Otherwise, return false.
+// There may be duplicates in the original array.
+//
+// Note: An array A rotated by x positions results in an array B of the same length such that A[i] == B[(i+x) % A.length], where % is the modulo operation.
+//
+// Constraints:
+//
+//	1 <= nums.length <= 100
+//	1 <= nums[i] <= 100
 package main
 
 import (
@@ -10,34 +22,16 @@ import (
 	testcase "github.com/lloydlobo/leetcode/easy/1752-check-if-array-is-sorted-and-rotated/testcase"
 )
 
-func sleep(x time.Duration) {
-	time.Sleep(time.Millisecond * x)
-}
-
-func main() {
-	var arrGot []bool
-	var arrWant []bool
-
-	t := &testcase.Testcase{}
-	t.ArrNums, t.ArrWants = testcase.GetTestcase()
-
-	color.Set(color.FgYellow, color.Bold)
-	arrGot, arrWant = testcase.ExecForLoop(Check, t)
-	go sleep(500)
-	log.Printf(" ➜  got: %v | want: %v\n", arrGot, arrWant)
-	arrGot, arrWant = testcase.ExecForLoop(CheckMiss, t)
-	go sleep(500)
-	log.Printf(" ➜  got: %v | want: %v\n", arrGot, arrWant)
-	color.Unset()
-
-	// fmt.Printf("➜ %2v | output: %11v | want: %11v\n\n", i, got, want)
-}
-
 // Runtime: 0 ms, faster than 100.00% of Go online submissions for Check if Array Is Sorted and Rotated.
 // Memory Usage: 2 MB, less than 87.88% of Go online submissions for Check if Array Is Sorted and Rotated.
 func CheckMiss(nums []int) bool {
+	n := len(nums)
+	if n < 3 {
+		return true // Edge case when numbers set are small.
+	}
 	miss := false
-	for i := 1; i < len(nums); i++ {
+
+	for i := 1; i < n; i++ {
 		prevMoreThanCurr := nums[i-1] > nums[i]
 		if !miss && prevMoreThanCurr {
 			miss = true
@@ -46,10 +40,9 @@ func CheckMiss(nums []int) bool {
 		}
 	}
 	if miss {
-		isLastLessThanEqualFirst := nums[len(nums)-1] <= nums[0]
+		isLastLessThanEqualFirst := nums[n-1] <= nums[0]
 		return isLastLessThanEqualFirst
 	}
-
 	return true
 }
 
@@ -70,6 +63,9 @@ func CheckMiss(nums []int) bool {
 // Memory Usage: 2.1 MB.
 func Check(nums []int) bool {
 	count, n := 0, len(nums)
+	if n < 3 {
+		return true // Edge case when numbers set are small.
+	}
 	for i := 0; i < n; i++ {
 		if nums[i] > nums[(i+1)%n] {
 			count++
@@ -78,27 +74,13 @@ func Check(nums []int) bool {
 			return false
 		}
 	}
-	// fmt.Printf("nums: %v\n", nums)
 	return true // return (count <= 1)
 }
 
-// swap
-//
-// swapF := reflect.Swapper(nums)
-// swapF(nums[i%count], nums[(i+1)%count])
-// Swapper returns a function that swaps the elements in the provided slice.
-// Swapper panics if the provided interface is not a slice.
-//
-// 1752. Check if Array Is Sorted and Rotated
-// Easy
-// Given an array nums, return true if the array was originally sorted in non-decreasing order, then rotated some number of positions (including zero). Otherwise, return false.
-// There may be duplicates in the original array.
-//
-// Note: An array A rotated by x positions results in an array B of the same length such that A[i] == B[(i+x) % A.length], where % is the modulo operation.
-//
-// Constraints:
-//     1 <= nums.length <= 100
-//     1 <= nums[i] <= 100
+func sleep(x time.Duration) {
+	time.Sleep(time.Millisecond * x)
+}
+
 /*
 # Examples:
 
@@ -123,14 +105,23 @@ func Check(nums []int) bool {
     You can rotate the array by x = 0 positions (i.e. no rotation) to make nums.
 */
 
-/*
-	featureVector := []interface{}{
-		[]int{1, 2}, []float64{1.2, 2.2}, []string{"a", "b"},
-	}
-	featureVector = append(featureVector, []byte{'x', 'y'})
-	fmt.Printf("%#v", featureVector)
+func main() {
+	var arrGot []bool
+	var arrWant []bool
 
-	// []interface{}{[]int{1, 2}, []float64{1.2, 2.2}, []string{"a", "b"}, []uint8{0x78, 0x79}}
-*/
+	t := &testcase.Testcase{}
+	t.ArrNums, t.ArrWants = testcase.GetTestcase()
+
+	color.Set(color.FgYellow, color.Bold)
+	arrGot, arrWant = testcase.ExecForLoop(Check, t)
+	go sleep(500)
+	log.Printf(" ➜  got: %v | want: %v\n", arrGot, arrWant)
+	arrGot, arrWant = testcase.ExecForLoop(CheckMiss, t)
+	go sleep(500)
+	log.Printf(" ➜  got: %v | want: %v\n", arrGot, arrWant)
+	color.Unset()
+
+	// fmt.Printf("➜ %2v | output: %11v | want: %11v\n\n", i, got, want)
+}
 
 // check-if-array-is-sorted-and-rotated ends here

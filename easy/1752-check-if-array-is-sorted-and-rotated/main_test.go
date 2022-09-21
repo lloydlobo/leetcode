@@ -65,11 +65,19 @@ func BenchmarkCheck(b *testing.B) {
 /*
 # BenchmarkCheckMiss()
 
-	2022-09-21 05:12  ➜  go test -v -bench=.
 	goos: linux
 	goarch: amd64
 	pkg: github.com/lloydlobo/leetcode/easy/1752-check-if-array-is-sorted-and-rotated
 	cpu: Intel(R) Core(TM) i7-8700 CPU @ 3.20GHz
+
+	2022-09-21 09:19
+	BenchmarkCheck-12                4925289               241.3 ns/op
+	BenchmarkCheckMiss-12            6939687               168.1 ns/op
+	PASS
+	ok      github.com/lloydlobo/leetcode/easy/1752-check-if-array-is-sorted-and-rotated    2.782s
+
+
+	2022-09-21 05:12  ➜  go test -v -bench=.
 	BenchmarkCheck-12                4953817               237.5 ns/op
 	BenchmarkCheckMiss-12            6815260               169.5 ns/op
 	PASS

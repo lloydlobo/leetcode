@@ -1,6 +1,6 @@
 // [[file:../README.org::maximum-product-of-three-numbers][maximum-product-of-three-numbers]]
-// 628. Max
-imum Product of Three Numbers.
+//
+// 628. Max imum Product of Three Numbers.
 //
 // Given an integer array nums, find three numbers whose product is maximum and return the maximum product.
 //
@@ -34,4 +34,5 @@ func main() {
 	testcases.ExecForLoop(singlescan.MaximumProductSingleScan, arrNums, arrWant, n)
 	testcases.ExecForLoop(sorting.MaximumProductSorting, arrNums, arrWant, n)
 }
+
 // maximum-product-of-three-numbers ends here
