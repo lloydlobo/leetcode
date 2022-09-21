@@ -1,4 +1,4 @@
-/* [[file:../../README.org::1752-check-if-array-is-sorted-and-rotated][1752-check-if-array-is-sorted-and-rotated]]
+/* [[file:../../README.org::1752-check-if-array-is-sorted-and-rotated][1752-check-if-array-is-sorted-and-rotated]] */
  */
 #include <stdbool.h>
 #include <stddef.h>

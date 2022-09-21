@@ -12,23 +12,25 @@
   - [[#alternatives][Alternatives]]
 - [[#0009-palindrome-number][0009. PALINDROME NUMBER]]
   - [[#source-1][Source]]
+- [[#0175-combine-two-tables][0175. COMBINE TWO TABLES]]
+  - [[#source-2][SOURCE]]
 - [[#0412-fizz-buzz][0412. FIZZ BUZZ]]
-  - [[#source-2][Source]]
+  - [[#source-3][Source]]
   - [[#explanation-1][Explanation]]
   - [[#examples][Examples]]
   - [[#constraints][Constraints]]
   - [[#complexity][Complexity]]
 - [[#0628-maximum-product-of-three-numbers][0628. MAXIMUM PRODUCT OF THREE NUMBERS]]
-  - [[#source-3][Source]]
+  - [[#source-4][Source]]
   - [[#explanation-2][Explanation]]
   - [[#constraints-1][Constraints]]
   - [[#examples-1][Examples]]
 - [[#0704-binary-search][0704. BINARY SEARCH]]
-  - [[#source-4][Source]]
+  - [[#source-5][Source]]
   - [[#explanation-3][Explanation]]
   - [[#constraints-2][Constraints:]]
 - [[#1752-check-if-array-is-sorted-and-rotated][1752. Check if Array Is Sorted and Rotated]]
-  - [[#source-5][Source]]
+  - [[#source-6][Source]]
   - [[#explanation-4][Explanation]]
   - [[#examples-2][Examples]]
 
@@ -262,6 +264,106 @@ func main() {
 
 #+RESULTS:
 : Output: true
+* 0175. COMBINE TWO TABLES
+** SOURCE
+*** MYSQL
+#+NAME: 0175-combine-two-tables
+#+begin_src sql :tangle ./0175-combine-two-tables/my.sql :comments link :noweb yes :main no
+--
+# 0175. Combine Two Tables
+--
+-- Write an SQL query to report the first name, last name, city, and state of each person in the Person table. If the address of a personId is not present in the Address table, report null instead.
+-- Return the result table in any order.
+--
+-- https://leetcode.com/problems/combine-two-tables/
+--
+-- Runtime: 598 ms.
+-- Memory:  0B.
+
+SELECT Person.firstName, Person.lastName, Address.city, Address.state
+FROM Person LEFT JOIN Address
+ON Person.personId = Address.personId
+
+-- ---------------------------------------------------
+
+-- +-----------+----------+---------------+----------+
+-- | firstName | lastName | city          | state    |
+-- +-----------+----------+---------------+----------+
+-- | Allen     | Wang     | Null          | Null     |
+-- | Bob       | Alice    | New York City | New York |
+-- +-----------+----------+---------------+----------+
+
+-- --------------------------------------------------
+
+-- Example 1:
+--
+-- Input:
+-- Person table:
+-- +----------+----------+-----------+
+-- | personId | lastName | firstName |
+-- +----------+----------+-----------+
+-- | 1        | Wang     | Allen     |
+-- | 2        | Alice    | Bob       |
+-- +----------+----------+-----------+
+-- Address table:
+-- +-----------+----------+---------------+------------+
+-- | addressId | personId | city          | state      |
+-- +-----------+----------+---------------+------------+
+-- | 1         | 2        | New York City | New York   |
+-- | 2         | 3        | Leetcode      | California |
+-- +-----------+----------+---------------+------------+
+-- Output:
+-- +-----------+----------+---------------+----------+
+-- | firstName | lastName | city          | state    |
+-- +-----------+----------+---------------+----------+
+-- | Allen     | Wang     | Null          | Null     |
+-- | Bob       | Alice    | New York City | New York |
+-- +-----------+----------+---------------+----------+
+-- Explanation:
+-- There is no address in the address table for the personId = 1 so we return null in their city and state.
+-- addressId = 1 contains information about the address of personId = 2.
+
+-- ---------------------------------------------------
+
+-- SQL Schema
+--
+-- Table: Person
+--
+-- +-------------+---------+
+-- | Column Name | Type    |
+-- +-------------+---------+
+-- | personId    | int     |
+-- | lastName    | varchar |
+-- | firstName   | varchar |
+-- +-------------+---------+
+-- personId is the primary key column for this table.
+-- This table contains information about the ID of some persons and their first and last names.
+--
+--
+--
+-- Table: Address
+--
+-- +-------------+---------+
+-- | Column Name | Type    |
+-- +-------------+---------+
+-- | addressId   | int     |
+-- | personId    | int     |
+-- | city        | varchar |
+-- | state       | varchar |
+-- +-------------+---------+
+-- addressId is the primary key column for this table.
+-- Each row of this table contains information about the city and state of one person with ID = PersonId.
+--
+--
+--
+-- Write an SQL query to report the first name, last name, city, and state of each person in the Person table. If the address of a personId is not present in the Address table, report null instead.
+--
+-- Return the result table in any order.
+--
+-- The query result format is in the following example.
+--
+--
+#+end_src
 * 0412. FIZZ BUZZ
 ** Source
 *** Go
