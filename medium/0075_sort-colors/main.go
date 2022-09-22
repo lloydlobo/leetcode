@@ -1,73 +1,46 @@
+// [[file:../README.org::sort-colors][sort-colors]]
 package main
 
 import (
 	"fmt"
 	"log"
-	"time"
-	// "time"
 )
 
-func swp(arr *[]int, idx1, idx2 int) {
-	temp := (*arr)[idx2]
-	(*arr)[idx2] = (*arr)[idx1]
-	(*arr)[idx1] = temp
+func swap(nums []int, i, j int) {
+	tempNum := nums[i]
+	nums[i] = nums[j]
+	nums[j] = tempNum
 }
 
-// Runtime: 0 ms, faster than 100.00% of Go online submissions for Sort Colors.
+// sortColors() is bubble sort implementation for colors.
+//
+// Process: Swap, check order, one-round bubbling, repeated n times.
+// Runtime: 4 ms, faster than 25.87% of Go online submissions for Sort Colors.
 // Memory Usage: 2.1 MB, less than 67.82% of Go online submissions for Sort Colors.
-func sortColors(nums []int) {
-	// quicksort(&nums. 0, len(nums)-1)
-
-	// One pass with constant extra space
-	// using 3 pointer.
-	l, r := 0, len(nums)-1
-	i := 0
-	for i <= r {
-		if nums[i] == 0 {
-			swp(&nums, l, i)
-			l++
-		} else if nums[i] == 2 {
-			swp(&nums, r, i)
-			r--
-			i--
+//
+// ♥ 19:56:37.689437 | nums: [2 0 2 1 1 0]
+// ♥ 19:56:37.689492 | Output: [0 0 1 1 2 2]
+func sortColors(nums []int) []int {
+	len := len(nums)
+	// loop j repeats i-loop n times
+	for j := 0; j < len; j++ {
+		// loop i for each len(nums)
+		for i := 0; i < len-1; i++ {
+			if nums[i] > nums[i+1] {
+				swap(nums, i, i+1)
+			}
 		}
-		i++
 	}
+	return nums
 }
 
 func main() {
-	log.SetFlags(4)
-	log.SetPrefix("")
-
-	nums := []int{2, 0, 0, 1, 2, 0, 0, 1, 0, 2, 1, 0, 2, 1, 2, 2, 1, 0, 1, 2, 1, 2, 1, 2, 0, 0, 1, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0}
-	log.Printf("%v\n\n", nums)
-	// log.SetOutput()
-
-	timeStart := time.Now()
-	sortColors(nums)
-	timeDiff := time.Now().Sub(timeStart)
-
-	log.Printf("%v\n\n", nums)
-	fmt.Printf("\nProcess exited in %s.", timeDiff)
-	// log.Output(int(timeDiff), "Comepleted!")
+	log.SetPrefix("\n♥ ") // SetPrefix sets the output prefix for the standard logger\.
+	log.SetFlags(4)       // SetFlags sets the output flags for the standard logger\. The flag bits are Ldate, Ltime, and so on\.
+	fmt.Println("0075-sort-colors/main.go: main()")
+	nums := []int{2, 0, 2, 1, 1, 0}
+	log.Println("| nums:", nums)
+	output := sortColors(nums)
+	log.Println("| Output:", output)
 }
-
-// func partition(array *[]int, p, r int) int {
-//     q:=p
-//     for i:=p; i < r; i++ {
-//         if (*array)[i] < (*array)[r] {
-//             swap(array, i, q)
-//             q++
-//         }
-//     }
-//     swap(array, q, r)
-//     return q
-// }
-
-// func quicksort(array *[]int, p, r int) {
-//     if p < r {
-//         q := partition(array, p, r)
-//         quicksort(array, p, q-1)
-//         quicksort(array, q+1, r)
-//     }
-// }
+// sort-colors ends here
