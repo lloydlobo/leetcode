@@ -6,12 +6,23 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"strings"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
 )
+
+// BenchmarkMain with printing to console.
+//
+// 2022-09-22 12:25
+// BenchmarkMain-12                   53625             22079 ns/op
+func BenchmarkMain(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		main()
+	}
+}
 
 // func TestReverseWords(t *testing.InternalTest)  {
 // reverseWords reverse the order of chars in each word.
@@ -42,7 +53,11 @@ func TestSliceString(t *testing.T) {
 	size := len(strings.Split(s, " "))
 	want := []string{"Let's", "take", "LeetCode", "contest"}
 	got, gotSize := sliceString(s)
-	log.Printf("sliceString(%s) = %s; want: %s; test: %v", s, got, want, cmp.Equal(got, want))
+
+	if !cmp.Equal(got, want) {
+		err := fmt.Errorf("sliceString(%s) = %s; want: %s; test: %v", s, got, want, cmp.Equal(got, want))
+		t.Errorf("err: %v\n", err)
+	}
 	if size != gotSize {
 		t.Errorf("_, len(%s) = sliceString(s); want: %v; got: %v", s, size, gotSize)
 	}
@@ -52,8 +67,39 @@ func TestSliceString(t *testing.T) {
 // and returns a slice of words.
 func BenchmarkSliceString(b *testing.B) {
 	s := "Let's take LeetCode contest"
+
 	for i := 0; i < b.N; i++ {
 		sliceString(s)
+	}
+}
+
+// `sliceString` slices the string with seperator " ".
+// and returns a slice of words.
+//
+// t.Errorf(cmp.Equal(got, want))
+func TestSliceChars(t *testing.T) {
+	s := "Let's take LeetCode contest"
+	want := []string{"s'teL", "ekat", "edoCteeL", "tsetnoc"} // "doG gniD"
+	arrS, size := sliceString(s)
+	got := sliceChars(arrS, size)
+
+	if !cmp.Equal(got, want) {
+		err := fmt.Errorf("sliceChars(%v) = %v; want: %s; test: %v", arrS, got, want, cmp.Equal(got, want))
+		log.Fatalf("err: %v\n", err)
+	}
+}
+
+// BenchmarkSliceChars()
+//
+// func sliceChars(arrS []string, size int) []string {
+// Slice each characters into a slice.
+// Then reverse them in position.
+func BenchmarkSliceChars(b *testing.B) {
+	s := "Let's take LeetCode contest"
+	arrS, size := sliceString(s)
+
+	for i := 0; i < b.N; i++ {
+		sliceChars(arrS, size)
 	}
 }
 
@@ -79,7 +125,8 @@ BenchmarkReverseWords-12          456525              2459 ns/op
 BenchmarkSliceString
 BenchmarkSliceString-12          3912076               308.2 ns/op
 PASS
-ok      github.com/lloydlobo/leetcode/easy/0557-reverse-words-in-a-string-iii   2.671s */
+ok      github.com/lloydlobo/leetcode/easy/0557-reverse-words-in-a-string-iii   2.671s
+*/
 
 // ///////////////////////////////////////////////////////////////
 // ARCHIVE.
