@@ -1,6 +1,6 @@
 #+TITLE: Leetcode Easy Solutions
 #+AUTHOR: lloydlobo
-#+STARTUP: showeverything
+#+STARTUP: fold
 #+OPTIONS: num:nil ^:{}
 # #+PROPERTY: header-args :tangle yes :results none
 -----
