@@ -33,3 +33,25 @@ func BenchmarkMaxProductDifference(b *testing.B) {
 		}
 	}
 }
+
+// Log Benchmarks:
+//
+// 2022-09-27 12:39
+//
+// goos: linux
+// goarch: amd64
+// pkg: github.com/lloydlobo/leetcode/easy/1913-maximum-product-difference-between-two-pairs/go
+// cpu: Intel(R) Core(TM) i7-8700 CPU @ 3.20GHz
+// BenchmarkMaxProductDifference
+// BenchmarkMaxProductDifference-12          331869              3434 ns/op
+// PASS
+// ok      github.com/lloydlobo/leetcode/easy/1913-maximum-product-difference-between-two-pairs/go 1.18
+//
+// 2022-09-27 12:38
+// goos: linux
+// goarch: amd64
+// pkg: github.com/lloydlobo/leetcode/easy/1913-maximum-product-difference-between-two-pairs/go
+// cpu: Intel(R) Core(TM) i7-8700 CPU @ 3.20GHz
+// BenchmarkMaxProductDifference-12         337892       3349 ns/op
+// PASS
+// ok      github.com/lloydlobo/leetcode/easy/1913-maximum-product-difference-between-two-pairs/go 1.174s
