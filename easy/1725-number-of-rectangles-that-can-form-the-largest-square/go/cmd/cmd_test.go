@@ -1,27 +1,21 @@
 package cmd
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/lloydlobo/leetcode/easy/0944-delete-columns-to-make-sorted/go/testcases"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCountGoodRectangles(t *testing.T) {
-	var output []int
-	r1 := [][]int{{5, 8}, {3, 9}, {5, 12}, {16, 5}}
-	r2 := [][]int{{2, 3}, {3, 7}, {4, 3}, {3, 7}}
-	r := [][][]int{r1, r2}
-
-	n := len(r)
-	for i := 0; i < n; i++ {
-		output = append(output, countGoodRectangles(r[i]))
-	}
-
+	var got []int
 	want := []int{3, 3}
-	for i := 0; i < n; i++ {
-		got := output[i]
+	arr, n := testcases.GetTestcases()
 
-		if got != want[i] {
-			t.Errorf("Execute() = %v; want: %v", got, want[i])
+	for i := 0; i < n; i++ {
+		got = append(got, CountGoodRectangles(arr[i]))
+		if got[i] != want[i] {
+			t.Errorf("Execute() = %v; want: %v", got[i], want[i])
 		}
 	}
 }
@@ -52,7 +46,7 @@ func BenchmarkCountGoodRectangles(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < len(r); j++ {
-			countGoodRectangles(r[j])
+			CountGoodRectangles(r[j])
 		}
 	}
 }

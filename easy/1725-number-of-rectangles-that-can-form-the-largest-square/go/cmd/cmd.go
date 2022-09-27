@@ -3,6 +3,8 @@ package cmd
 import (
 	"math"
 	"sort"
+
+	"github.com/lloydlobo/leetcode/easy/0944-delete-columns-to-make-sorted/go/testcases"
 )
 
 // countGoodRectangles returns an int.
@@ -36,7 +38,7 @@ import (
 //	maxLen := side length OR value of largest square possible.
 //
 // Runtime: 30 ms |	Memory: 6.5 MB
-func countGoodRectangles(rectangles [][]int) int {
+func CountGoodRectangles(rectangles [][]int) int {
 	var (
 		maxLenS []int
 		counter int
@@ -62,7 +64,7 @@ func countGoodRectangles(rectangles [][]int) int {
 	return counter
 }
 
-func CountGoodRectangles(rectangles [][]int) int {
+func CountGoodRectanglesCompare(rectangles [][]int) int {
 	maxLen := 0
 	counter := 0
 	k := 0
@@ -140,12 +142,11 @@ func CountGoodRectanglesMap(rectangles [][]int) int {
 // r = append(r, liwi0, liwi1, liwi2, liwi3)
 func Execute() []int {
 	var output []int
-	r1 := [][]int{{5, 8}, {3, 9}, {5, 12}, {16, 5}}
-	r2 := [][]int{{2, 3}, {3, 7}, {4, 3}, {3, 7}}
-	r := [][][]int{r1, r2}
 
-	for i := 0; i < len(r); i++ {
-		output = append(output, countGoodRectangles(r[i]))
+	arr, n := testcases.GetTestcases()
+
+	for i := 0; i < n; i++ {
+		output = append(output, CountGoodRectangles(arr[i]))
 	}
 
 	return output
