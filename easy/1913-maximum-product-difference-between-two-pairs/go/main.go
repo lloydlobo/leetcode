@@ -3,7 +3,6 @@
     https://leetcode.com/problems/maximum-product-difference-between-two-pairs/
 
     The product difference between two pairs (a, b) and (c, d) is defined as (a * b) - (c * d).
-
     For example, the product difference between (5, 6) and (2, 7) is (5 * 6) - (2 * 7) = 16.
 
     Given an integer array nums, choose four distinct indices
@@ -44,5 +43,4 @@ Examples.
         Output: 64
         Explanation: We can choose indices 3 and 6 for the first pair (9, 8) and indices 1 and 5 for the second pair (2, 4).
         The product difference is (9 * 8) - (2 * 4) = 64.
-
 */

@@ -1,51 +1,33 @@
 package cmd
 
 import (
-	"sort"
+	"log"
+
+	algoClone "github.com/lloydlobo/leetcode/easy/1913-maximum-product-difference-between-two-pairs/go/algo/clone"
+	algoMinmax "github.com/lloydlobo/leetcode/easy/1913-maximum-product-difference-between-two-pairs/go/algo/minmax"
+	algoSort "github.com/lloydlobo/leetcode/easy/1913-maximum-product-difference-between-two-pairs/go/algo/sort"
+	testcases "github.com/lloydlobo/leetcode/easy/1913-maximum-product-difference-between-two-pairs/go/testcases"
 )
 
-// MaxProductDifferrence()
-//
-// 4 <= nums.length <= 104
-// 1 <= nums[i] <= 104
-// The product difference between two pairs (a, b) and (c, d)
-// is defined as (a * b) - (c * d).
-func MaxProductDifferrence(nums []int) int {
-	n := len(nums)
-
-	sortedNums := getSortIdx(nums, n)                 // Sort by value while keeping the index beside it.
-	lg, sm, _ := getGreatestMultiplier(sortedNums, n) // Multiply and store id of first 2 and last two nums.
-
-	return lg - sm // Return difference of largest to smallest product.
+func ExecuteFunction(f func(n []int) int, nums []int, want int) (int, int) {
+	var got int
+	for i := 0; i < len(nums); i++ {
+		got = f(nums)
+	}
+	log.Printf("got: %v; want: %v\n", got, want)
+	return got, want
 }
 
-func getGreatestMultiplier(nums [][]int, size int) (int, int, []int) {
-	a, b, y, z := nums[0][0], nums[1][0], nums[size-2][0], nums[size-1][0]     // 9 8 4 2
-	ia, ib, iy, iz := nums[0][1], nums[1][1], nums[size-2][1], nums[size-1][1] // 9 8 4 2
+func Execute() {
+	arrNums, arrWants := testcases.GetTestcases()
 
-	lg, sm := a*b, y*z               // Populate 0*1, n-1*n. (products)
-	lgsmIdx := []int{ia, ib, iy, iz} // Populate 0,1,n-1,n. (ids)
+	for i := 0; i < len(arrNums); i++ {
+		nums, want := arrNums[i], arrWants[i]
 
-	return lg, sm, lgsmIdx
-}
-
-func getSortIdx(nums []int, size int) [][]int {
-	var hash = make(map[int][]int)
-	var keys = make([][]int, size)
-	// Populate hash map with hashed nums and id.
-	for i := 0; i < size; i++ {
-		// get index of all nums before sorting
-		hash[i] = []int{nums[i], i}
+		ExecuteFunction(algoSort.MaxProductDifferenceSort, nums, want)
+		ExecuteFunction(algoClone.MaxProductDifferenceClone, nums, want)
+		ExecuteFunction(algoMinmax.MaxProductDifferenceMinMax, nums, want)
 	}
-	// Populate keys slice with hashed nums and id.
-	for i := 0; i < len(hash); i++ {
-		keys[i] = []int{hash[i][0], hash[i][1]}
-	}
-	// Sort by value while keeping the index beside it.
-	sort.Slice(keys, func(i, j int) bool {
-		return keys[i][0] > keys[j][0]
-	})
-	return keys
 }
 
 /*
