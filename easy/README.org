@@ -2,6 +2,7 @@
 #+AUTHOR: lloydlobo
 #+STARTUP: fold
 #+OPTIONS: num:nil ^:{}
+# #+PROPERTY: header-args :main no :comments link :noweb yes
 # #+PROPERTY: header-args :tangle yes :results none
 -----
 
@@ -14,25 +15,32 @@
   - [[#source-1][Source]]
 - [[#0175-combine-two-tables][0175. COMBINE TWO TABLES]]
   - [[#source-2][SOURCE]]
+- [[#0344-reverse-string][0344-reverse-string]]
+  - [[#go][Go]]
+  - [[#explanation-1][Explanation]]
 - [[#0412-fizz-buzz][0412. FIZZ BUZZ]]
   - [[#source-3][Source]]
-  - [[#explanation-1][Explanation]]
+  - [[#explanation-2][Explanation]]
   - [[#examples][Examples]]
   - [[#constraints][Constraints]]
   - [[#complexity][Complexity]]
 - [[#0628-maximum-product-of-three-numbers][0628. MAXIMUM PRODUCT OF THREE NUMBERS]]
   - [[#source-4][Source]]
-  - [[#explanation-2][Explanation]]
+  - [[#explanation-3][Explanation]]
   - [[#constraints-1][Constraints]]
   - [[#examples-1][Examples]]
 - [[#0704-binary-search][0704. BINARY SEARCH]]
   - [[#source-5][Source]]
-  - [[#explanation-3][Explanation]]
+  - [[#explanation-4][Explanation]]
   - [[#constraints-2][Constraints:]]
 - [[#1752-check-if-array-is-sorted-and-rotated][1752. Check if Array Is Sorted and Rotated]]
   - [[#source-6][Source]]
-  - [[#explanation-4][Explanation]]
+  - [[#explanation-5][Explanation]]
   - [[#examples-2][Examples]]
+- [[#1913-maximum-product-difference-between-two-pairs][1913. Maximum Product Difference Between Two Pairs]]
+  - [[#sort][sort]]
+  - [[#clone][clone]]
+  - [[#minmax][minmax]]
 
 * 0001. TWO SUM
 ** Source
@@ -364,6 +372,47 @@ ON Person.personId = Address.personId
 --
 --
 #+end_src
+* 0344-reverse-string
+** Go
+#+name: 0344-reverse-string/go
+#+begin_src go :tangle ./0344-reverse-string/go/algo/reverse_string.go :noweb yes :comments link :main no
+package algo
+
+// Write a function that reverses a string.
+// - The input string is given as an array of characters s.
+// - You must do this by modifying the input array in-place with O(1) extra memory.
+// Constraints:
+// 1 <= s.length <= 105
+// s[i] is a printable ascii character.
+func ReverseString(s []byte) string{
+	return "Hello"
+}
+
+
+
+#+end_src
+
+#+RESULTS:
+
+** Explanation
+Write a function that reverses a string.
+- The input string is given as an array of characters s.
+- You must do this by modifying the input array in-place with O(1) extra memory.
+*** Constraints:
+1 <= s.length <= 105
+s[i] is a printable ascii character.
+*** Example 1:
+#+begin_example
+Input: s = ["h","e","l","l","o"]
+Output: ["o","l","l","e","h"]
+#+end_example
+*** Example 2:
+#+begin_example
+Input: s = ["H","a","n","n","a","h"]
+Output: ["h","a","n","n","a","H"]
+#+end_example
+
+
 * 0412. FIZZ BUZZ
 ** Source
 *** Go
@@ -1239,3 +1288,122 @@ int main() {
 #+end_src
 ** Explanation
 ** Examples
+* 1913. Maximum Product Difference Between Two Pairs
+** sort
+#+begin_src go :tangle ./1913-maximum-product-difference-between-two-pairs/go/algo/sort/sort.go :main no :comments link :noweb yes
+package sort
+
+import (
+"sort"
+)
+
+// MaxProductDifferenceSort() sorts the slice nums.
+// and returns product of first & last two integers.
+//
+// Using an unstable sort standard function.
+//
+// https://leetcode.com/submissions/detail/809639232/
+//
+// Runtime: 34 ms; Memory: 6.4 MB
+func MaxProductDifferenceSort(nums []int) int {
+n := len(nums)
+sort.Ints(nums)
+return (nums[n-1] * nums[n-2]) - (nums[0] * nums[1])
+}
+#+end_src
+
+** clone
+#+begin_src go :tangle ./1913-maximum-product-difference-between-two-pairs/go/algo/clone/clone.go :main no :comments link :noweb yes
+package clone
+
+import "sort"
+
+type SortedKeys struct {
+	Value int
+	Id    int
+}
+
+// MaxProductDifferenceClone keeps the nums intact,
+// and returns difference of the product of
+// the 2 largest and 2 smallest numbers.
+//
+// Runtime: 69 ms; Memory: 8.5 MB
+func MaxProductDifferenceClone(nums []int) int {
+	n := len(nums)
+
+	sortedNums := getSortIdx(nums, n)                 // Sort by value while keeping the index beside it.
+	lg, sm, _ := getGreatestMultiplier(sortedNums, n) // Multiply and store id of first 2 and last two nums.
+
+	return lg - sm // Return difference of largest to smallest product.
+}
+
+func getSortIdx(nums []int, size int) [][]int {
+	var hash = make(map[int][]int)
+	var keys = make([][]int, size)
+	// Populate hash map with hashed nums and id.
+	for i := 0; i < size; i++ {
+		// get index of all nums before sorting
+		hash[i] = []int{nums[i], i}
+	}
+	// Populate keys slice with hashed nums and id.
+	for i := 0; i < len(hash); i++ {
+		keys[i] = []int{hash[i][0], hash[i][1]}
+	}
+	// Sort by value while keeping the index beside it.
+	sort.Slice(keys, func(i, j int) bool {
+		return keys[i][0] > keys[j][0]
+	})
+	return keys
+}
+
+func getGreatestMultiplier(n [][]int, size int) (int, int, []int) {
+	a, b, y, z := n[0][0], n[1][0], n[size-2][0], n[size-1][0]         // 9 8 4 2
+	ida, idb, idy, idz := n[0][1], n[1][1], n[size-2][1], n[size-1][1] // a b y z
+
+	large, small := a*b, y*z             // Populate 0*1, n-1*n. (products)
+	abyzIdx := []int{ida, idb, idy, idz} // Populate 0,1,n-1,n. (ids)
+
+	return large, small, abyzIdx
+}
+
+#+end_src
+
+** minmax
+#+begin_src go :tangle ./1913-maximum-product-difference-between-two-pairs/go/algo/minmax/minmax.go :main no :comments link :noweb yes
+package minmax
+
+// Is it like counting? and tallying?
+func MaxProductDifferenceMinMax(nums []int) int {
+	max1, max2 := nums[0], nums[1]
+	if max1 < max2 {
+		max1, max2 = max2, max1
+	}
+	min1, min2 := nums[0], nums[1]
+	if min1 > min2 {
+		min1, min2 = min2, min1
+	}
+
+	size := len(nums)
+
+	for i := 2; i < size; i++ {
+		num := nums[i]
+
+		if num > max1 {
+			max2 = max1
+			max1 = num
+		} else if num > max2 {
+			max2 = num
+		}
+
+		if num < min1 {
+			min2 = min1
+			min1 = num
+		} else if num < min2 {
+			min2 = num
+		}
+	}
+
+	return max1*max2 - min1*min2
+}
+#+end_src
+

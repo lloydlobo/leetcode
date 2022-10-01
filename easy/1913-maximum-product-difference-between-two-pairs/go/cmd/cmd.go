@@ -14,6 +14,7 @@ func ExecuteFunction(f func(n []int) int, nums []int, want int) (int, int) {
 	for i := 0; i < len(nums); i++ {
 		got = f(nums)
 	}
+
 	log.Printf("got: %v; want: %v\n", got, want)
 	return got, want
 }
@@ -26,7 +27,9 @@ func Execute() {
 
 		ExecuteFunction(algoSort.MaxProductDifferenceSort, nums, want)
 		ExecuteFunction(algoClone.MaxProductDifferenceClone, nums, want)
-		ExecuteFunction(algoMinmax.MaxProductDifferenceMinMax, nums, want)
+		ExecuteFunction(algoMinmax.MaxProductDifferenceMinMaxWithStruct, nums, want)
+		ExecuteFunction(algoMinmax.MaxProductDifferenceMinMaxWithoutStruct, nums, want)
+		// ExecuteFunction(algoMinmax.MinMax, nums, want)
 	}
 }
 

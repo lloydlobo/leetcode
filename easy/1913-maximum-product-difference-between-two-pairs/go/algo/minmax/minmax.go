@@ -1,3 +1,4 @@
+// [[file:../../../../README.org::*minmax][minmax:1]]
 package minmax
 
 // Is it like counting? and tallying?
@@ -33,3 +34,4 @@ func MaxProductDifferenceMinMax(nums []int) int {
 
 	return max1*max2 - min1*min2
 }
+// minmax:1 ends here

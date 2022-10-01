@@ -1,3 +1,4 @@
+// [[file:../../../../README.org::*clone][clone:1]]
 package clone
 
 import "sort"
@@ -49,3 +50,4 @@ func getGreatestMultiplier(n [][]int, size int) (int, int, []int) {
 
 	return large, small, abyzIdx
 }
+// clone:1 ends here

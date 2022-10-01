@@ -13,28 +13,52 @@ func TestRunMain(t *testing.T) {
 	main()
 }
 
-func TestMaxProductDifferenceMinmax(t *testing.T) {
+func TestMaxProductDifferenceMinmaxWithStruct(t *testing.T) {
 	nums, wants := testcases.GetTestcases()
 	for i := 0; i < len(nums); i++ {
 		num, want := nums[i], wants[i]
 
-		got := algoMinmax.MaxProductDifferenceMinMax(num)
+		got := algoMinmax.MaxProductDifferenceMinMaxWithStruct(num)
 		if got != want {
 			t.Errorf("MaxProductDifference(%v) = %v; want: %v", num, got, want)
 		}
 	}
 }
 
-func BenchmarkMaxProductDifferenceMinmax(b *testing.B) {
+func BenchmarkMaxProductDifferenceMinmaxWithStruct(b *testing.B) {
 	nums, _ := testcases.GetTestcases()
 	for i := 0; i < len(nums); i++ {
 		num := nums[i]
 
 		for j := 0; j < b.N; j++ {
-			algoMinmax.MaxProductDifferenceMinMax(num)
+			algoMinmax.MaxProductDifferenceMinMaxWithStruct(num)
 		}
 	}
 }
+
+func TestMaxProductDifferenceMinmaxWithoutStruct(t *testing.T) {
+	nums, wants := testcases.GetTestcases()
+	for i := 0; i < len(nums); i++ {
+		num, want := nums[i], wants[i]
+
+		got := algoMinmax.MaxProductDifferenceMinMaxWithoutStruct(num)
+		if got != want {
+			t.Errorf("MaxProductDifference(%v) = %v; want: %v", num, got, want)
+		}
+	}
+}
+
+func BenchmarkMaxProductDifferenceMinmaxWithoutStruct(b *testing.B) {
+	nums, _ := testcases.GetTestcases()
+	for i := 0; i < len(nums); i++ {
+		num := nums[i]
+
+		for j := 0; j < b.N; j++ {
+			algoMinmax.MaxProductDifferenceMinMaxWithoutStruct(num)
+		}
+	}
+}
+
 func TestMaxProductDifferenceSort(t *testing.T) {
 	nums, wants := testcases.GetTestcases()
 	for i := 0; i < len(nums); i++ {
@@ -82,6 +106,42 @@ func BenchmarkMaxProductDifferenceClone(b *testing.B) {
 }
 
 // Log Benchmarks:
+//
+// 2022-09-28 07:20
+//
+// goos: linux
+// goarch: amd64
+// pkg: github.com/lloydlobo/leetcode/easy/1913-maximum-product-difference-between-two-pairs/go
+// cpu: Intel(R) Core(TM) i7-8700 CPU @ 3.20GHz
+// BenchmarkMaxProductDifferenceMinmaxWithStruct-12        83828912                14.19 ns/op
+// BenchmarkMaxProductDifferenceMinmaxWithoutStruct-12     83060829                14.26 ns/op
+// BenchmarkMaxProductDifferenceSort-12                    13768419                87.35 ns/op
+// BenchmarkMaxProductDifferenceClone-12                     714735              1538 ns/op
+// ok      github.com/lloydlobo/leetcode/easy/1913-maximum-product-difference-between-two-pairs/go 5.783s
+//
+// 2022-09-28 06:53
+//
+// goos: linux
+// goarch: amd64
+// pkg: github.com/lloydlobo/leetcode/easy/1913-maximum-product-difference-between-two-pairs/go
+// cpu: Intel(R) Core(TM) i7-8700 CPU @ 3.20GHz
+// BenchmarkMaxProductDifferenceMinmaxWithStruct-12        68554383                16.94 ns/op
+// BenchmarkMaxProductDifferenceMinmaxWithoutStruct-12     82901066                14.28 ns/op
+// BenchmarkMaxProductDifferenceSort-12                    13251756                89.17 ns/op
+// BenchmarkMaxProductDifferenceClone-12                     714526              1547 ns/op
+// ok      github.com/lloydlobo/leetcode/easy/1913-maximum-product-difference-between-two-pairs/go 4.781s
+//
+// 2022-09-27 23:24
+//
+// goos: linux
+// goarch: amd64
+// pkg: github.com/lloydlobo/leetcode/easy/1913-maximum-product-difference-between-two-pairs/go
+// cpu: Intel(R) Core(TM) i7-8700 CPU @ 3.20GHz
+// BenchmarkMaxProductDifferenceMinmax-12          83021190                14.27 ns/op
+// BenchmarkMaxProductDifferenceSort-12            12678550                93.19 ns/op
+// BenchmarkMaxProductDifferenceClone-12             737697              1625 ns/op
+// PASS
+// ok      github.com/lloydlobo/leetcode/easy/1913-maximum-product-difference-between-two-pairs/go 4.698s
 //
 // 2022-09-27 13:19
 //
