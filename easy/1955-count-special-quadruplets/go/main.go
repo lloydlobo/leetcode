@@ -14,6 +14,26 @@ var Nums = []int{1, 1, 1, 3, 5} // 4
 func main() {
 	out := algo.LeetCountQuadruplets(Nums)
 	fmt.Printf("outLeet: %v\n", out)
+	out = algo.ExecuteAlgo1(Nums)
+	fmt.Printf("outAlgo1: %v\n", out)
 	// out = algo.Execute(Nums)
-	// fmt.Printf("out: %v\n", out)
+	out = countQuadruplets(Nums)
+	fmt.Printf("outCountQua...: %v\n", out)
+}
+
+func countQuadruplets(nums []int) int {
+	MAP := make(map[int]int)
+	count, n := 0, len(nums)
+	for b := 1; b < n; b++ {
+		// a + b
+		for a := 0; a < b; a++ {
+			MAP[nums[a]+nums[b]]++
+		}
+		//d - c
+		c := (b + 1)
+		for d := b + 2; d < n; d++ {
+			count += MAP[nums[d]-nums[c]]
+		}
+	}
+	return count
 }
