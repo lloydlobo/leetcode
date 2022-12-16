@@ -12,67 +12,79 @@ use solution::IsPowerOfTwo;
 fn main() {
     dbg!(IsPowerOfTwo::modulus_loop(helpers::Pow::base(2i32, 4u32)));
     dbg!(IsPowerOfTwo::modulus_loop(3));
-    dbg!(IsPowerOfTwo::ceil_floor(3));
+
+    let output: bool = IsPowerOfTwo::ceil_floor(Input::new(2i32).num);
+    dbg!(output);
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+pub struct Input {
+    pub num: i32,
+}
 
-    /// Test `is_power_of_two` function.
-    ///
-    /// # Panics
-    ///
-    /// Panics if .
-    /// # Examples
-    ///
-    /// ```
-    /// use leetcode::base_pow;
-    /// let exp = 4u32;
-    /// let base = 2i32;
-    /// let pow: i32 = base_pow(base, exp);
-    /// assert!(solution::IsPowerOfTwo::modulus_loop(pow), "2^{} = {}", exp, pow);
-    /// ```
-    #[test]
-    fn test_is_power_of_two() {
-        let exp = 4u32;
-        let base = 2i32;
-
-        let pow: i32 = helpers::Pow::base(base, exp);
-        assert!(solution::IsPowerOfTwo::modulus_loop(pow), "2^{} = {}", exp, pow);
-    }
-
-    /// Returns true if the given number is a power of two.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use leetcode_rs::Solution;
-    /// ```
-    #[test]
-    fn test_is_power_of_two_ceil_floor() {
-        assert!(solution::IsPowerOfTwo::ceil_floor(2), "2 is a power of two");
-        assert!(solution::IsPowerOfTwo::ceil_floor(16), "16 is a power of two");
-        assert!(!solution::IsPowerOfTwo::ceil_floor(3), "3 is not a power of two");
-        assert!(!solution::IsPowerOfTwo::ceil_floor(1200), "1200 is not a power of two");
-    }
-
-    #[test]
-    /// Computes the power of a base number.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// let base = 2;
-    /// let exp = 10;
-    ///
-    /// assert_eq!(1024, base_pow(base, exp));
-    /// ```
-    fn test_base_pow() {
-        let exp = 10u32;
-        let base = 2i32;
-
-        let pow: i32 = helpers::Pow::base(base, exp);
-        assert!(pow == (2i32).pow(10u32), "2^{} = {}", exp, pow);
+impl Input {
+    pub fn new(n: i32) -> Self {
+        Self { num: n }
     }
 }
+
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
+
+//     /// Test `is_power_of_two` function.
+//     ///
+//     /// # Panics
+//     ///
+//     /// Panics if .
+//     /// # Examples
+//     ///
+//     /// ```
+//     /// use leetcode::base_pow;
+//     /// let exp = 4u32;
+//     /// let base = 2i32;
+//     /// let pow: i32 = base_pow(base, exp);
+//     /// assert!(solution::IsPowerOfTwo::modulus_loop(pow), "2^{} = {}", exp, pow);
+//     /// ```
+//     #[test]
+//     fn test_is_power_of_two() {
+//         let exp = 4u32;
+//         let base = 2i32;
+
+//         let pow: i32 = helpers::Pow::base(base, exp);
+//         assert!(solution::IsPowerOfTwo::modulus_loop(pow), "2^{} = {}", exp, pow);
+//     }
+
+//     /// Returns true if the given number is a power of two.
+//     ///
+//     /// # Examples
+//     ///
+//     /// ```
+//     /// use leetcode_rs::Solution;
+//     /// ```
+//     #[test]
+//     fn test_is_power_of_two_ceil_floor() {
+//         assert!(solution::IsPowerOfTwo::ceil_floor(2), "2 is a power of two");
+//         assert!(solution::IsPowerOfTwo::ceil_floor(16), "16 is a power of two");
+//         assert!(!solution::IsPowerOfTwo::ceil_floor(3), "3 is not a power of two");
+//         assert!(!solution::IsPowerOfTwo::ceil_floor(1200), "1200 is not a power of two");
+//     }
+
+//     #[test]
+//     /// Computes the power of a base number.
+//     ///
+//     /// # Examples
+//     ///
+//     /// ```
+//     /// let base = 2;
+//     /// let exp = 10;
+//     ///
+//     /// assert_eq!(1024, base_pow(base, exp));
+//     /// ```
+//     fn test_base_pow() {
+//         let exp = 10u32;
+//         let base = 2i32;
+
+//         let pow: i32 = helpers::Pow::base(base, exp);
+//         assert!(pow == (2i32).pow(10u32), "2^{} = {}", exp, pow);
+//     }
+// }
