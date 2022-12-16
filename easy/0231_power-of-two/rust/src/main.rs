@@ -63,13 +63,10 @@ impl Solution {
             1i32 => true,
             _ => {
                 let mut n: i32 = n;
-                while n > 1i32 {
-                    if n % 2i32 != 0i32 {
-                        return false;
-                    }
+                while n % 2i32 == 0 {
                     n /= 2i32;
                 }
-                true
+                n == 1i32
             }
         }
     }
