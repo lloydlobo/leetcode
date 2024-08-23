@@ -6,11 +6,24 @@
 **
 */
 
-
+#include "flux.hpp"
 #include <iostream>
 #include <ranges>
 #include <vector>
 
+#include <array>
+
+int run_flux_example()
+{
+    constexpr auto result = flux::ints()                           // 0,1,2,3,...
+                                .filter(flux::pred::even)          // 0,2,4,6,...
+                                .map([](int i) { return i * 2; })  // 0,4,8,12,...
+                                .take(3)                           // 0,4,8
+                                .sum();                            // 12
+
+    static_assert(result == 12);
+    return result;
+}
 
 // Finds the minimum sum from pairs formed by the smallest and largest values
 // in the sorted vector. This result is then averaged by multiplying by `0.5`,
@@ -61,5 +74,8 @@ int main(int argc, char *argv[])
 {
     std::vector<int> nums = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };  //> 4
     std::cout << minimum_average(nums) << "\n";
+
+    std::cout << run_flux_example() << "\n";
+    std::cout << std::endl;
     return 0;
 }

@@ -48,7 +48,7 @@ go.work
 # !Makefile
 
 # ...even if they are in subdirectories
-!*/
+# !*/
 
 # #########################################################
 # Rust
@@ -240,14 +240,14 @@ dist
 # https://github.com/github/gitignore/blob/main/Global/Emacs.gitignore
 
 # -*- mode: gitignore; -*-
-*~
-\#*\#
+# *~
+# \#*\#
 /.emacs.desktop
 /.emacs.desktop.lock
 *.elc
 auto-save-list
 tramp
-.\#*
+# .\#*
 
 # Org-mode
 .org-id-locations
