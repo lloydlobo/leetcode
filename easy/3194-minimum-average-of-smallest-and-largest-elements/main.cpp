@@ -3,23 +3,25 @@
 ** $ find . -name '*cpp' | entr -crs 'zig c++ -std=c++20 main.cpp; ./a.out'
 **
 **
-**
 */
 
-#include "flux.hpp"
+#include <array>
+#include <cassert>
 #include <iostream>
 #include <ranges>
 #include <vector>
 
-#include <array>
+#include "flux.hpp"  // [Open in browser](https://github.com/tcbrindle/flux?tab=readme-ov-file)
 
+// copied from https://flux.godbolt.org/z/KKcEbYnTx
 int run_flux_example()
 {
-    constexpr auto result = flux::ints()                           // 0,1,2,3,...
-                                .filter(flux::pred::even)          // 0,2,4,6,...
-                                .map([](int i) { return i * 2; })  // 0,4,8,12,...
-                                .take(3)                           // 0,4,8
-                                .sum();                            // 12
+    constexpr auto result
+        = flux::ints()                           // 0,1,2,3,...
+              .filter(flux::pred::even)          // 0,2,4,6,...
+              .map([](int i) { return i * 2; })  // 0,4,8,12,...
+              .take(3)                           // 0,4,8
+              .sum();                            // 12
 
     static_assert(result == 12);
     return result;
@@ -70,12 +72,45 @@ auto minimum_average(std::vector<int> &nums) -> double
 // 4. **Minimum Sum:** All sums are `8`, so the minimum is `8`.
 // 5. **Final Result:** `0.5 * 8 = 4.0`.
 //
+
+void debug_printvec(std::vector<int> vec)
+{
+    std::cout << "[ ";
+    for (auto x : vec)
+        std::cout << x << " ";
+    std::cout << "]\n";
+}
+
+
+void run_examples()
+{
+    {
+        auto is_small = [](int i) { return i < 10; };
+
+        std::vector<int> vec { 1, 2, 3, 4, 5 };
+        debug_printvec(vec);
+        bool all_small = flux::all(vec, is_small);  // check whether every element is small
+        assert(all_small);
+    }
+
+    {
+        auto is_even = [](int i) { return i % 2 == 0; };
+        std::vector<int> vec { 1, 3, 4, 5, 7, 9 };
+        debug_printvec(vec);
+        assert(flux::any(vec, is_even));  // found an even element
+    }
+}
+
+
 int main(int argc, char *argv[])
 {
+    run_examples();
+
     std::vector<int> nums = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };  //> 4
     std::cout << minimum_average(nums) << "\n";
 
     std::cout << run_flux_example() << "\n";
+
     std::cout << std::endl;
     return 0;
 }
