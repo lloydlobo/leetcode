@@ -1,23 +1,25 @@
 const std = @import("std");
-const print = std.debug.print;
+const root = @import("root.zig");
 
-fn average(arr: []const i32) f32 {
-    const n = arr.len;
+fn average(nums: []const i32) f32 {
+    // @splat(scalar: anytype)
+    const n = nums.len;
 
     var acc: i32 = 0;
-    for (arr) |value| acc += value;
+    for (nums) |value| acc += value;
 
     var avg: f32 = @floatFromInt(acc);
     avg = @divExact(avg, 2.0);
 
-    print("arr: {any}\n", .{arr}); //> { 1, 2, 3, 4, 5, 6, 7, 8, 9 }
-    print("len: {any}\n", .{n}); //> 9
-    print("sum: {any}\n", .{acc}); //> 45
-    print("avg: {any}\n", .{avg}); //> 2.2e1
+    std.debug.print("arr: {any}\n", .{nums}); //> { 1, 2, 3, 4, 5, 6, 7, 8, 9 }
+    std.debug.print("len: {any}\n", .{n}); //> 9
+    std.debug.print("sum: {any}\n", .{acc}); //> 45
+    std.debug.print("avg: {any}\n", .{avg}); //> 2.2e1
 
     return avg;
 }
 
+// [See also](https://zig.guide/standard-library/sorting/)
 fn minimum_average(nums: []const i32) !f32 {
     var s: []i32 = try std.heap.page_allocator.alloc(i32, nums.len); //create a mutable copy of input array
     defer std.heap.page_allocator.free(s);
@@ -25,24 +27,12 @@ fn minimum_average(nums: []const i32) !f32 {
     std.mem.sort(i32, s, {}, comptime std.sort.asc(i32)); //sort the array in ascending order
 
     const mid = @divFloor(nums.len, 2);
-
-    if (comptime false) {
-        const l = s[0..mid]; //create slices for the left and right parts
-        var r = try std.heap.page_allocator.alloc(i32, mid);
-        defer std.heap.page_allocator.free(r);
-        for (l, 0..) |_, i| r[i] = s[s.len - 1 - i]; //reverse the right slice
-        var min_sum: i32 = l[0] + r[0]; //initial calculate the minimum sum of pairs from l and r
-        for (l, 0..) |_, i| min_sum = @min(min_sum, l[i] + r[i]);
-        const res: f32 = @floatFromInt(min_sum);
-        return res * 0.5;
-    } else {
-        var acc = s[0] + s[s.len - 1];
-        for (s[0..mid], 0..) |_, i| {
-            acc = @min(acc, s[i] + s[s.len - 1 - i]);
-        }
-        const res: f32 = @floatFromInt(acc);
-        return res * 0.5;
+    var acc = s[0] + s[s.len - 1];
+    for (s[0..mid], 0..) |_, i| {
+        acc = @min(acc, s[i] + s[s.len - 1 - i]);
     }
+    const res: f32 = @floatFromInt(acc);
+    return res * 0.5;
 }
 
 pub fn main() !void {
@@ -61,15 +51,18 @@ pub fn main() !void {
     // var alloc = allocator.alloc(i32, 1024);
 
     {
-        const root = @import("root.zig");
         try stdout.print(
             "root.add({0}, {1}) -> '{2}'\n",
             .{ 1, 2, root.add(1, 2) },
         );
     }
 
-    {
+    { //3194-minimum-average-of-smallest-and-largest-elements
         const nums = .{ 5, 6, 7, 1, 2, 3, 4, 8, 9 };
+        std.debug.assert(3 == root.len_satisfy_fn(i32, &nums, is_even));
+
+        const avg = average(&nums);
+        std.debug.print("{any}\n", .{avg});
         const res = try minimum_average(&nums);
         std.debug.print("{any}\n", .{res});
         //Output:
@@ -80,7 +73,22 @@ pub fn main() !void {
         //  l: { 1, 2, 3, 4 }, r: { 9, 8, 7, 6 }
     }
 
+    {
+        const nums = .{ 5, 6, 7, 1, 2, 3, 4, 8, 9 };
+        std.debug.print("nums: {any}\n", .{nums});
+        const is_all_even = root.all(i32, &nums, is_even);
+        // const is_all_wrapper: bool = root.wrap_all(root.all(i32, &nums, is_even));
+        // std.debug.print("is_all_wrapper: {any}\n", .{is_all_wrapper});
+        const is_any_even = (root.any(i32, &nums, is_even) == 1);
+        std.debug.print("all: {any}\n", .{is_all_even});
+        std.debug.print("any: {any}\n", .{is_any_even});
+    }
+
     try bw.flush(); // don't forget to flush!
+}
+
+fn is_even(x: i32) bool {
+    return @mod(x, 3) == 0;
 }
 
 test "simple test" {
