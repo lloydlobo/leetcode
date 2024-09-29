@@ -366,3 +366,9 @@ tags
 *.msm
 *.msp
 *.txz
+
+# #########################################################
+# Vendor Libraries
+# #########################################################
+
+./easy/3194-minimum-average-of-smallest-and-largest-elements/flux.hpp
